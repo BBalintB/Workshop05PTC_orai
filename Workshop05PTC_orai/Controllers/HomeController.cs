@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,12 +20,16 @@ namespace Workshop05PTC_orai.Controllers
         private readonly ApplicationDbContext _db;
         private readonly RoleManager<IdentityRole> _roleManager;
 
+        BlobServiceClient serviceClient;
+        BlobContainerClient containerClient;
         public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, ApplicationDbContext db, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _userManager = userManager;
             _db = db;
             _roleManager = roleManager;
+            serviceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=oenikka;AccountKey=SPAYDIlI2xaxhp4jhdQ6PIWaQ5UvNSvuUzLyP3E4TanfqPiuh2YO0ixQ9Re06TP0N20cf1cMbiGI+AStil1KqA==;EndpointSuffix=core.windows.net");
+            containerClient = serviceClient.GetBlobContainerClient("photos");
         }
 
         public IActionResult Index()
