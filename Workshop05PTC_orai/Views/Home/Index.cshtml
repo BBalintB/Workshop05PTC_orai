@@ -1,21 +1,28 @@
-﻿@using Workshop05PTC_orai.Data
-
+﻿
 @{
     ViewData["Title"] = "Cars";
 
 }
 
-@model ApplicationDbContext
+@model IEnumerable<Car>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-@{ 
-    /*foreach (var item in Model.Cars)
+@{
+    foreach (var item in Model)
     {
-
-    }*/
+        <div class="col">
+            <div class="card">
+                <img src="@item.PhotoUrl" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h4 class="card-title">@item.Type</h4>
+                    <h6 class="card-title">@item.User.Email</h6>
+                </div>
+            </div>
+        </div>
+    }
 
 }

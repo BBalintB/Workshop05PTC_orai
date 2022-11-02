@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -35,7 +36,7 @@ namespace Workshop05PTC_orai.Controllers
 
         public IActionResult Index()
         {
-            return View(_db);
+            return View(_db.Cars);
         }
         [HttpGet]
         public IActionResult Add()
@@ -46,11 +47,21 @@ namespace Workshop05PTC_orai.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Add([FromForm] Car c, [FromForm] IFormFile photoUpload)
+        public async Task<IActionResult> Add([FromForm] Car c, [FromForm] IFormFile photoUpload)
         {
             ;
             c.UserId = _userManager.GetUserId(this.User);
+            BlobClient blobClient = containerClient.GetBlobClient(c.UserId + "_" + c.Type.Replace(" ", "").ToLower());
+            using (var uploadFileStream = photoUpload.OpenReadStream())
+            {
+                await blobClient.UploadAsync(uploadFileStream, true);
+            }
+            blobClient.SetAccessTier(AccessTier.Cool);
+            c.PhotoUrl = blobClient.Uri.AbsoluteUri;
 
+            _db.Cars.Add(c);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
             return View();
         }
 
