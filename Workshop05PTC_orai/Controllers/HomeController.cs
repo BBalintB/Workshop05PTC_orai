@@ -63,7 +63,6 @@ namespace Workshop05PTC_orai.Controllers
             _db.Cars.Add(c);
             _db.SaveChanges();
             return RedirectToAction(nameof(Index));
-            return View();
         }
 
         public IActionResult Privacy()
