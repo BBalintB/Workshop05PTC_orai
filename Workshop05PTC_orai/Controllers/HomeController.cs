@@ -51,6 +51,7 @@ namespace Workshop05PTC_orai.Controllers
         {
             ;
             c.UserId = _userManager.GetUserId(this.User);
+            
             BlobClient blobClient = containerClient.GetBlobClient(c.UserId + "_" + c.Type.Replace(" ", "").ToLower());
             using (var uploadFileStream = photoUpload.OpenReadStream())
             {
