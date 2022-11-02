@@ -37,6 +37,8 @@ namespace Workshop05PTC_orai.Controllers
             return View();
         }
 
+
+        [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm] Car c, [FromForm] IFormFile photoUpload)
         {
